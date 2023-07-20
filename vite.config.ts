@@ -11,6 +11,14 @@ export default defineConfig({
 		  '@':pathResolve('src'), //把 src 的别名设置为 @
 	  }
   },
+  // 添加公共scss文件
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@import "./src/public/index.scss";'
+      }
+    }
+  },
   server: {
     proxy: {
       // 选项写法
