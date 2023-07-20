@@ -19,7 +19,7 @@ request.interceptors.request.use(function (config) {
 request.interceptors.response.use(function (response) {
   // 2xx 范围内的状态码都会触发该函数。
   // 对响应数据做点什么
-  if(response.data.code === 1){
+  if(response.data.code === 200){
     return response.data
   } else {
     return Promise.reject()

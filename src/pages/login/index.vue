@@ -25,15 +25,20 @@
 
 <script lang='ts' setup>
 import { reactive, ref, onBeforeMount } from 'vue'
+import { useRouter } from 'vue-router'
 import * as userApi from '@/api/api'
 const labelPosition = ref('right')
 import type { FormInstance, FormRules } from 'element-plus'
+import userUserInfo from '@/store/user'
+// import { useStore } from 'pinia'
 
 interface ruleForm {
   phone: number
   password: [string, number]
 }
 const ruleFormRef = ref<FormInstance>()
+const store = userUserInfo()
+const router = useRouter()
 const formLabelAlign = reactive({
   phone: '',
   password: ''
@@ -49,16 +54,17 @@ const rules = reactive<FormRules<ruleForm>>({
   ]
 })
 const onSubmit = async(formEl: FormInstance | undefined) => {
-  console.log(formEl)
   if(!formEl) return
   await formEl.validate((valid, firlds) => {
+    console.log(2);
+    
     if(valid) {
       userApi.login(formLabelAlign).then(res => {
-        console.log(res)
+        store.setUserInfo(res.data)
+        router.push('/')
       })
     } else {
-      console.log(firlds);
-      
+      console.log(firlds, 3);
     }
   })
 }
