@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '@/Layout/index.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -17,7 +17,17 @@ const routes: Array<RouteRecordRaw> = [
         name: 'index',
         component: () => import("../pages/home/index.vue"),
         meta: {
-          title: '首页'
+          title: '首页',
+          icon: 'HomeFilled'
+        }
+      },
+      {
+        path: '/short',
+        name: 'short',
+        component: () => import("../pages/short/index.vue"),
+        meta: {
+          title: '短网址',
+          icon: 'Link'
         }
       }
     ]
@@ -29,4 +39,13 @@ const router = createRouter({
   routes,
 })
 
+const breadList:any = []
+router.beforeEach((to, _from, next) => {
+  const show = breadList.filter((item: { fullPath: string }) => item.fullPath === to.fullPath)
+  if (!show.length && to.fullPath !== '/' && to.fullPath !== '/login') {
+    breadList.push(to)
+    localStorage.setItem('breadList', JSON.stringify(breadList))
+  }
+  next()
+})
 export default router

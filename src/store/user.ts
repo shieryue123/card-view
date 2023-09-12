@@ -8,12 +8,14 @@ interface UserInfo {
 }
 interface State {
     info: UserInfo[],
-    token: string
+    token: string,
+    routeList: any
 }
 const userUserInfo = defineStore('info', {
     state: (): State => ({
         info: [],
         token: '',
+        routeList: []
     }),
     // getters: {
     //     getUserInfo() {
@@ -23,9 +25,12 @@ const userUserInfo = defineStore('info', {
     actions: {
         setUserInfo(val: State) {
             localStorage.setItem('token', val.token)
-            localStorage.setItem('info', JSON.stringify(val.info))
+            localStorage.setItem('info', JSON.stringify(val.info[0]))
             this.info = val.info
             this.token = val.token
+        },
+        setRoute(val:any) {
+            this.routeList.push(val)
         }
     }
 })

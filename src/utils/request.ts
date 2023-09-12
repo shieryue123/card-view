@@ -50,8 +50,11 @@ request.interceptors.response.use(function (response) {
 }, function (error) {
   // 超出 2xx 范围的状态码都会触发该函数。
   // 对响应错误做点什么
-  const res = error.response
-  alert(res.data.message)
+  ElMessage({
+    message: error.response.data.message,
+    type: 'error'
+  })
+  loading.close()
   return Promise.reject(error)
 })
 export default request
