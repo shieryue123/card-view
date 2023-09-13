@@ -21,7 +21,7 @@ request.interceptors.request.use(function (config) {
     loading = ElLoading.service(loadingConfig)
   }
   const token = localStorage.getItem('token')
-  config.headers["Authorization"] = token
+  config.headers["Access_Token"] = token
   // 在发送请求之前做些什么
   return config
 }, function (error) {

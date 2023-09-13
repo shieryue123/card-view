@@ -9,10 +9,25 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import addShort from './components/addShort.vue'
+import * as Api from '@/api/short'
 const clumb = reactive({
     searchlist: [
-        {label: ''}
-    ]
+        {label: '短链接码', value: 'shot_code'},
+        {label: '链接地址', value: 'full_url'}
+    ],
+    clubme: [
+        { name: '短链接码', value: 'shot_code'},
+        { name: '链接地址', value: 'full_url'}
+    ],
+    getData(data: any) {
+        return new Promise((resolve, reject) => {
+            Api.shortList(data).then((res:any) => {
+                resolve(res)
+            }).catch((err: any) => {
+                reject(err)
+            })
+        })
+    }
 })
 
 // 添加链接

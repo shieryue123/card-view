@@ -2,8 +2,8 @@
   <el-dialog v-model="dialogVisible" title="添加短网址" width="500">
     <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm" :size="formSize"
       status-icon>
-      <el-form-item label="链接地址：" prop="base_url">
-        <el-input v-model="ruleForm.base_url" placeholder="请输入链接地址"/>
+      <el-form-item label="链接地址：" prop="full_url">
+        <el-input v-model="ruleForm.full_url" placeholder="请输入链接地址"/>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -23,17 +23,17 @@ import type { FormInstance, FormRules } from 'element-plus'
 import * as Api from '@/api/short.ts'
 
 interface RuleForm {
-  base_url: string
+  full_url: string
 }
 
 const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive<RuleForm>({
-  base_url: '',
+  full_url: '',
 })
 
 const rules = reactive<FormRules<RuleForm>>({
-  base_url: [
+  full_url: [
     { required: true, message: '请输入链接地址', trigger: 'blur' },
   ]
 })
