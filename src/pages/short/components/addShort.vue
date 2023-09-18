@@ -8,7 +8,7 @@
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="submitForm(ruleFormRef)">取消</el-button>
+        <el-button @click="dialogVisible = false">取消</el-button>
         <el-button type="primary" @click="submitForm(ruleFormRef)">
           确认
         </el-button>
@@ -43,7 +43,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   await formEl.validate((valid, fields) => {
     if (valid) {
       Api.addShort(ruleForm).then(res => {
-        console.log('添加成功')
+        emit('onAdd', false, true)
       })
     } else {
       console.log('error submit!', fields)
@@ -55,11 +55,6 @@ const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.resetFields()
 }
-
-const options = Array.from({ length: 10000 }).map((_, idx) => ({
-  value: `${idx + 1}`,
-  label: `${idx + 1}`,
-}))
 
 
 // 注册弹窗控制

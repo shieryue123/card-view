@@ -14,60 +14,96 @@
       <slot name="page_btn"></slot>
     </div>
     <div class="page_list">
-      <el-table :data="tableData">
+      <el-table :data="tableData" height="520px" :border="true">
         <el-table-column :prop="item.value" :label="item.name" v-for="(item, index) in props.clumb?.clubme"
           :key="index" />
+
+        <slot name="table_column"></slot>
+        <!-- <el-table-column>
+          <template #default="scope">
+          </template>
+        </el-table-column> -->
       </el-table>
     </div>
     <div class="page_footer">
       <el-config-provider :locale="locale">
-        <el-pagination v-model:current-page="current" v-model:page-size="size" :page-sizes="[100, 200, 300, 400]"
-          layout="total, sizes, prev, pager, next, jumper" :total="0" @size-change="handleSizeChange"
-          @current-change="handleCurrentChange" />
+        <el-pagination v-model:current-page="formInline.page" v-model:page-size="formInline.size"
+          :page-sizes="[20, 50, 100, 200]" layout="total, sizes, prev, pager, next, jumper" :total="total"
+          @size-change="handleSizeChange" @current-change="handleCurrentChange" />
       </el-config-provider>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
+/**
+ * clumb:{ //表格配置
+ *  searchlist: [ //搜索框配置
+      { 
+        label: string, //搜索框label配置
+        value: string //表单属性配置 
+      }
+    ],
+    clubme: [
+        { 
+          name: '短链接码', //表格头部名称
+          value: 'shot_code' //表格属性
+        },
+    ],
+    getData(data: any) {
+        return new Promise((resolve, reject) => {
+          表格数据请求
+            // Api.shortList(data).then((res: any) => {
+            //     resolve(res)
+            // }).catch((err: any) => {
+            //     reject(err)
+            // })
+        })
+    }
+ * }
+ * page_btn：搜索框以及表格中间插槽
+ * table_column： 表格内部操作插槽
+ */
 import { reactive, ref, onMounted } from 'vue'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
 const props = defineProps({
   clumb: Object
 })
+
 // 请求列表数据
-let tableData:any = reactive([])
+let tableData: any = reactive([])
+const total = ref('')
 const Search = () => {
   props.clumb?.getData(formInline).then((res: any) => {
     tableData.length = 0
-    res.data.forEach((item: any, index: any) => {
+    total.value = res.data.total
+    res.data.list.forEach((item: any, index: any) => {
       tableData[index] = item
     })
-    // tableData = [...res.data]
-    console.log(tableData)
   })
 }
 onMounted(() => {
   Search()
 })
-console.log(props)
 
 const locale = ref(zhCn)
-const formInline: any = reactive({})
-const current = ref(1)
-const size = ref(100)
-
-
+const formInline: any = reactive({
+  page: 1,
+  size: 10
+})
 
 const onSubmit = () => {
   Search()
 }
 const handleSizeChange = () => {
-
+  Search()
 }
 const handleCurrentChange = () => {
-
+  Search()
 }
+defineExpose({
+  Search
+})
 </script>
 
 <style lang="scss">
@@ -78,10 +114,12 @@ const handleCurrentChange = () => {
 
   .page_list {
     flex: 1;
+    padding: 20px 0;
   }
 
   .page_footer {
     display: flex;
     justify-content: right;
   }
-}</style>
+}
+</style>

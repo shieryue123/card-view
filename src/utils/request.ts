@@ -8,6 +8,14 @@ const request = axios.create({
   timeout: 5000
 })
 
+let messageInstance:any = null;
+const overrideMessage = (options:object) => {
+  if (messageInstance) {
+  messageInstance.close();
+  }
+  messageInstance = ElMessage(options);
+  };
+  
 let loading: any = null
 const loadingConfig = {
   lock: true,
@@ -35,17 +43,11 @@ request.interceptors.response.use(function (response) {
   // 2xx 范围内的状态码都会触发该函数。
   // 对响应数据做点什么
   if(response.status === 200){
-    ElMessage({
+    overrideMessage({
       message: response.data.message,
       type: 'success'
     })
     return response.data
-  } else {
-    ElMessage({
-      message: response.data.message,
-      type: 'error'
-    })
-    return Promise.reject()
   }
 }, function (error) {
   // 超出 2xx 范围的状态码都会触发该函数。

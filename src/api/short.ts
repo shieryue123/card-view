@@ -2,7 +2,20 @@ import request from "@/utils/request"
 
 const apiHome = {
   addShort: '/short/add',
-  shortList: '/short/shortList'
+  shortList: '/short/shortList',
+  deleteUrl: '/short/deleteUrl'
+}
+
+/**
+ * 删除链接
+ * @param {*} data
+ */
+export function deleteUrl (data:Object) {
+  return request({
+    url: apiHome.deleteUrl,
+    method: 'post',
+    data
+  })
 }
 
 /**
